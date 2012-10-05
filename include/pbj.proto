@@ -1,0 +1,32 @@
+
+message Sandwich {
+  required Bread bread = 1;
+  optional int32 slices = 2 [default=2];
+  repeated Ingredient ingredients = 3;
+}
+
+message Ingredient {
+  optional Peanut_Butter peanut_butter = 1;
+  optional Jelly jelly = 2;
+}
+
+enum Bread {
+  WHITE = 1;
+  WHOLEMEAL = 2;
+}
+
+message Peanut_Butter {
+  required Style style = 1;
+  enum Style {
+    COARSE = 1;
+    SMOOTH = 2;
+  }
+}
+
+message Jelly {
+  require Flavor flavor = 1;
+  enum Flavor {
+    STRAWBERRY = 1;
+    RASPBERRY = 2;
+  }
+}
