@@ -58,8 +58,12 @@ websocket_handle({text, JSON}, Req, State) ->
   PBJ = #sandwich{
     bread = 'WHOLEMEAL',
     ingredients = [
-      #peanut_butter{style = 'COARSE'},
-      #jelly{flavor = 'STRAWBERRY'}
+      #ingredient{
+        peanut_butter = #peanut_butter{style = 'COARSE'}
+      },
+      #ingredient{
+        jelly = #jelly{flavor = 'STRAWBERRY'}
+      }
     ]
   },
   lists:foreach(
