@@ -30,3 +30,7 @@ message Jelly {
     RASPBERRY = 2;
   }
 }
+
+message Sandwich_Request {
+  required int32 count = 1;
+}

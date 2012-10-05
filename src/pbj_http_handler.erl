@@ -8,6 +8,7 @@
     websocket_info/3, websocket_terminate/3
   ]).
 
+-include("pbj_pb.hrl").
 
 -record(s, {
 
@@ -28,7 +29,11 @@ handle(Req0, State) ->
   <script type=\"text/javascript\">
   var ws = new WebSocket(\"ws://localhost:8080/ws/\");
   ws.onopen = function() {
-    console.log(\"opened\");
+    ws.send(JSON.stringify({
+      sandwichRequest: {
+        count: 4
+      }
+    }));
   };
   ws.onmessage = function(e) {
     var message = JSON.parse(e.data);
@@ -43,6 +48,13 @@ terminate(_Req, _State) ->
   ok.
 
 websocket_init(_TransportName, Req, _Opts) ->
+  {ok, Req, #s{
+    }}.
+
+websocket_handle({text, JSON}, Req, State) ->
+  #sandwich_request{
+    count = Count
+  } = pbj_pb:from_props(jsx:decode(JSON)),
   PBJ = #sandwich{
     bread = 'WHOLEMEAL',
     ingredients = [
@@ -50,11 +62,12 @@ websocket_init(_TransportName, Req, _Opts) ->
       #jelly{flavor = 'STRAWBERRY'}
     ]
   },
-  self() ! {send, PBJ},
-  {ok, Req, #s{
-    }}.
-
-websocket_handle({text, _JSON}, Req, State) ->
+  lists:foreach(
+    fun(_) ->
+        self() ! {send, PBJ}
+    end,
+    lists:seq(1, Count)
+  ),
   {ok, Req, State}.
 
 websocket_info({send, Message}, Req, State) ->
@@ -66,4 +79,4 @@ websocket_terminate(_Reason, _Req, _State) ->
   ok.
 
 json(Message) ->
-  jsx:encode(pbj_pb:json_ready(Message)).
+  jsx:encode(pbj_pb:json_ready(Message, true)).
