@@ -2,3 +2,5 @@ A demo for Erlang, Protocol Buffers, and JSON.
 
 Uses the experimental json branch of erlang-profobufs at
 https://github.com/mokele/erlang_protobuffs
+
+http://mokele.co.uk/2012/10/05/erlang-protobufs-and-json.html
